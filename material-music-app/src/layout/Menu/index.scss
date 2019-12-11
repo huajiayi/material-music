@@ -1,0 +1,32 @@
+.menu {
+  flex-basis: $menu-width;
+  background-color: var(--menu-bgcolor);
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+  overflow: auto;
+  z-index: 10;
+
+  .MuiPaper-root {
+    width: $menu-width !important;
+  }
+}
+
+.MuiDrawer-modal {
+  .MuiPaper-root {
+    width: $menu-width-mobile !important;
+  }
+}
+
+.menu-avatar-container {
+
+  .avatar {
+    width: 60px !important;
+    height: 60px !important;
+    margin-right: 20px;
+  }
+}
+
+.user-icon {
+  font-size: 60px !important;
+  margin-right: 20px;
+}
+

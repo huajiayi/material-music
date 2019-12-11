@@ -1,0 +1,25 @@
+body {
+  color: var(--font-color);
+}
+
+// 滚动条
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--menu-bgcolor);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-color);
+}
+
+.Mui-focused {
+  color: var(--input-color) !important;
+}
+
+.MuiInput-underline:after {
+  border-color: var(--input-color) !important;
+}
