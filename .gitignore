@@ -19,3 +19,35 @@
 /material-music-app/npm-debug.log*
 /material-music-app/yarn-debug.log*
 /material-music-app/yarn-error.log*
+
+/material-music-server/HELP.md
+/material-music-server/target/
+!/material-music-server/.mvn/wrapper/maven-wrapper.jar
+!/material-music-server/**/src/main/**
+!/material-music-server/**/src/test/**
+
+### STS ###
+/material-music-server/.apt_generated
+/material-music-server/.classpath
+/material-music-server/.factorypath
+/material-music-server/.project
+/material-music-server/.settings
+/material-music-server/.springBeans
+/material-music-server/.sts4-cache
+
+### IntelliJ IDEA ###
+/material-music-server/.idea
+/material-music-server/*.iws
+/material-music-server/*.iml
+/material-music-server/*.ipr
+
+### NetBeans ###
+/material-music-server//nbproject/private/
+/material-music-server//nbbuild/
+/material-music-server//dist/
+/material-music-server//nbdist/
+/material-music-server//.nb-gradle/
+/material-music-server/build/
+
+### VS Code ###
+/material-music-server/.vscode/
