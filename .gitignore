@@ -1,0 +1,21 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/material-music-app/node_modules
+
+# testing
+/material-music-app//coverage
+
+# production
+/material-music-app//build
+
+# misc
+/material-music-app/.DS_Store
+/material-music-app/.env.local
+/material-music-app/.env.development.local
+/material-music-app/.env.test.local
+/material-music-app/.env.production.local
+
+/material-music-app/npm-debug.log*
+/material-music-app/yarn-debug.log*
+/material-music-app/yarn-error.log*
