@@ -12,7 +12,7 @@ public enum Result implements IResult {
     PARAM_NOT_MATCH(1003, "参数不匹配"),
     METHOD_NOT_ALLOWED(1004, "HTTP谓词不支持"),
     /* 用户错误: 2001-2999 */
-    USER_NOT_LOGIN(2001, "用户未登录"),
+    USER_NOT_LOGIN(2001, "用户登录状态失效"),
     USER_LOGIN_ERROR(2002, "用户名或密码错误"),
     USER_HAS_EXISTED(2003, "用户名已存在"),
     USER_IS_FORBIDDEN(2004, "用户无访问权限");

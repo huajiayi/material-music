@@ -13,5 +13,8 @@ export default handleActions({
   },
   SET_SHOW_REGISTER_PAGE(state, action) {
     return {...state, showRegisterPage: action.payload}
+  },
+  SET_SHOW_PROFILE_PAGE(state, action) {
+    return {...state, showProfilePage: action.payload}
   }
 }, state)

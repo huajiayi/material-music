@@ -1,4 +1,3 @@
-
 server:
   port: 8080
   servlet:
@@ -16,6 +15,9 @@ spring:
       min-idle: 10
       default-auto-commit: true
       min-evictable-idle-time-millis: 3600000
+  servlet:
+    multipart:
+      max-file-size: 2MB
 
 logging:
   level:
@@ -26,3 +28,6 @@ logging:
 
 mybatis:
   config-location: classpath:mybatis.cfg.xml
+
+file:
+  upload-dir: /user/avatar

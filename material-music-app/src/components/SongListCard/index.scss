@@ -1,0 +1,34 @@
+.song-list-card {
+  flex-direction: column;
+  height: 100%;
+  margin-bottom: 10px !important;
+  padding: 5px;
+  cursor: pointer;
+
+  .song-list-img-warp {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    
+    .song-list-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 5px;
+    }
+
+    .song-list-img-cover {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+  }
+
+  .song-list-name {
+    font-size: 14px;
+    @include text-ellipsis-multi(2);
+    margin-top: 3px;
+  }
+
+}

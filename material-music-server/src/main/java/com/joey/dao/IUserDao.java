@@ -27,7 +27,7 @@ public interface IUserDao {
             "values (#{username}, #{password}, #{nickname}, #{avatarUrl}, #{salt}, now(), now())")
     int insert(User user);
 
-    @Update("update user set username=#{username}, password=#{password}, nickname=#{nickname}, avatar_url=#{avatarUrl}, update_time=now()) " +
+    @Update("update user set password=#{password}, nickname=#{nickname}, salt=#{salt}, update_time=now() " +
             "where id=#{id}")
     int update(User user);
 }

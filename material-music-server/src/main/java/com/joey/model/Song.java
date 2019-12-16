@@ -16,6 +16,8 @@ public class Song {
 
     private String author;
 
+    private String album;
+
     private String songUrl;
 
     private String lyric;
@@ -64,6 +66,14 @@ public class Song {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
     }
 
     public String getSongUrl() {

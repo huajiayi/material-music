@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useCallback, useEffect } from 'react'
 import './index.scss'
 import Button from '@material-ui/core/Button'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import { connect } from 'react-redux'
-import { setShowRegisterPage } from '@/store/common/action'
+import { useSelector, useDispatch } from 'react-redux'
+import { setShowRegisterPage, setShowLoginPage } from '@/store/common/action'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
@@ -15,47 +14,89 @@ import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import ResponsiveDialog from '../../components/ResponsiveDialog'
 import Avatar from '@material-ui/core/Avatar'
+import defaultAvatar from '@/assets/img/defaultAvatar.jpg'
+import { register } from '@/api'
+import Toast from '@/components/Toast'
+import { base64toBlob } from '@/common/utils'
 
-function Register({ showRegisterPage, setShowRegisterPage }) {
+export default function Register() {
 
+  const dispatch = useDispatch()
+
+  const [avatar, setAvatar] = useState(defaultAvatar)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [nickname, setNickname] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const avatarInput = useRef(null)
 
-  const handleChangeUsername = e => {
-    setUsername(e.target.value)
-  }
+  const showRegisterPage = useSelector(state => state.commonReducer.showRegisterPage)
 
-  const handleChangePassword = e => {
-    setPassword(e.target.value)
-  }
+  const _setShowLoginPage = useCallback(showLoginPage => dispatch(setShowLoginPage(showLoginPage)), [dispatch])
+  const _setShowRegisterPage = useCallback(showRegisterPage => dispatch(setShowRegisterPage(showRegisterPage)), [dispatch])
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword)
-  }
+  const handleChangeAvatar = useCallback(() => avatarInput.current.click(), [])
+  const validate = useCallback(file => {
+    if(!/^image\//.test(file.type)) return '只能上传图片'
+    if(file.size > (2 * 1024 * 1024)) return '图片不能大于2MB'
+  }, [])
+  const handleAvatarChanged = useCallback(() => {
+    const file = avatarInput.current.files[0]
+    const errMsg = validate(file)
+    if(errMsg) {
+      Toast.error(errMsg)
+      return
+    }
+    var reader = new FileReader()
+    reader.onload = e => {
+      setAvatar(e.target.result)
+    }
+    reader.readAsDataURL(file)
+  }, [validate])
+  const handleChangeUsername = useCallback(e => setUsername(e.target.value), [])
+  const handleChangePassword = useCallback(e => setPassword(e.target.value), [])
+  const toggleShowPassword = useCallback(() => setShowPassword(!showPassword), [showPassword])
+  const handleMouseDownPassword = useCallback(e => e.preventDefault(), [])
+  const handleChangeNickname = useCallback(e => setNickname(e.target.value), [])
+  const reset = useCallback(() => {
+    setAvatar(defaultAvatar)
+    setUsername('')
+    setPassword('')
+    setNickname('')
+    setShowPassword(false)
+  }, [])
+  const handleConfirm = useCallback(async () => {
+    if(username === '' || password === '' || nickname === '') {
+      Toast.error('值不能为空')
+      return
+    }
+    const data = new FormData()
+    let file = avatar === defaultAvatar ? base64toBlob(avatar) : avatarInput.current.files[0]
+    data.append('avatar', file)
+    data.append('username', username)
+    data.append('password', password)
+    data.append('nickname', nickname)
+    const isSuccess = await register(data)
+    if(isSuccess) {
+      _setShowRegisterPage(false)
+      _setShowLoginPage(true)
+    }
+  }, [_setShowLoginPage, _setShowRegisterPage, avatar, nickname, password, username])
 
-  const handleMouseDownPassword = e => {
-    e.preventDefault()
-  }
-
-  const handleChangeNickname = e => {
-    setNickname(e.target.value)
-  }
-
-  const handleClose = () => {
-    setShowRegisterPage(false)
-  }
+  useEffect(() => {
+    reset()
+  }, [reset, showRegisterPage])
 
   return (
     <ResponsiveDialog
+      title="注册"
       showDialog={showRegisterPage}
-      setShowDialog={setShowRegisterPage}
+      setShowDialog={_setShowRegisterPage}
     >
-      <DialogTitle>注册</DialogTitle>
       <DialogContent>
+        <input className="avatar-input" ref={avatarInput} type="file" accept="image/*" onChange={handleAvatarChanged}></input>
         <div className="login-avatar-container">
-          <Avatar className="avatar" src="https://p3.music.126.net/ma8NC_MpYqC-dK_L81FWXQ==/109951163250233892.jpg?param=80y80" />
+          <Avatar className="avatar" src={avatar} onClick={handleChangeAvatar}/>
         </div>
         <FormControl className="form" fullWidth>
           <InputLabel htmlFor="standard-adornment-username">用户名</InputLabel>
@@ -94,24 +135,10 @@ function Register({ showRegisterPage, setShowRegisterPage }) {
         </FormControl>
       </DialogContent>
       <DialogActions className="dialog-actions">
-        <Button onClick={handleClose} color="default">
+        <Button onClick={handleConfirm} color="default">
           确定
         </Button>
       </DialogActions>
     </ResponsiveDialog>
   )
 }
-
-const mapStateToProps = state => {
-  return {
-    showRegisterPage: state.commonReducer.showRegisterPage
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    setShowRegisterPage: showRegisterPage => dispatch(setShowRegisterPage(showRegisterPage))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Register)

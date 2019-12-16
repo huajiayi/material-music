@@ -1,7 +1,8 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { setShowMenu, setShowLoginPage } from '@/store/common/action'
-import { isUndef } from '../../common/util'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { setShowMenu, setShowLoginPage, setShowProfilePage } from '@/store/common/action'
+import { setUser } from '@/store/user/action'
+import { isEmptyObj } from '@/common/utils'
 import './index.scss'
 import Hidden from '@material-ui/core/Hidden'
 import Drawer from '@material-ui/core/Drawer'
@@ -10,41 +11,78 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Divider from '@material-ui/core/Divider'
-import InboxIcon from '@material-ui/icons/Inbox'
-import DraftsIcon from '@material-ui/icons/Drafts'
 import Avatar from '@material-ui/core/Avatar'
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+import { Link } from "react-router-dom"
+import router from '@/common/router'
+import { getUserInfo } from '@/api'
 
-function Menu({ showMenu, setShowMenu, setShowLoginPage, user }) {
+export default function Menu() {
 
-  const closeMenu = () => {
-    setShowMenu(false);
-  }
+  const dispatch = useDispatch()
+  
+  const [isLogin, setIsLogin] = useState(false)
 
-  const showLoginPage = () => {
-    setShowLoginPage(true)
-  }
+  const showMenu = useSelector(state => state.commonReducer.showMenu)
+  const user = useSelector(state => state.userReducer.user)
+
+  const closeMenu = useCallback(() => dispatch(setShowMenu(false)), [dispatch])
+  const showLoginPage = useCallback(() => dispatch(setShowLoginPage(true)), [dispatch])
+  const showProfilePage = useCallback(() => dispatch(setShowProfilePage(true)), [dispatch])
+  const _setUser = useCallback(user => dispatch(setUser(user)), [dispatch])
+
+  const handleCloseMenu = useCallback(() => closeMenu(false), [closeMenu])
+  const handleClickAvatar = useCallback(() => {
+    if(isLogin) {
+      showProfilePage()
+    }else {
+      showLoginPage()
+    }
+    handleCloseMenu()
+  }, [handleCloseMenu, isLogin, showLoginPage, showProfilePage])
+
+  useEffect(() => {
+    const init = async () => {
+      const userId = localStorage.getItem("userId")
+      if(userId) {
+        const userInfo = await getUserInfo()
+        if(userInfo) {
+          _setUser(userInfo)
+          setIsLogin(true)
+        }else {
+          localStorage.removeItem("userId") //用户登录状态失效
+        }
+      }
+    }
+    init()
+  }, [_setUser])
+
+  useEffect(() => {
+    setIsLogin(!isEmptyObj(user))
+  }, [user])
 
   const drawer = (
     <div>
       <List>
-        <ListItem button onClick={showLoginPage}>
-          {isUndef(user.nickname) ? (
-            <AccountCircleIcon className="user-icon" />) : (
+        <ListItem button onClick={handleClickAvatar}>
+          {isLogin ? (
             <div className="menu-avatar-container">
-              <Avatar className="avatar" src="https://p3.music.126.net/ma8NC_MpYqC-dK_L81FWXQ==/109951163250233892.jpg?param=80y80" />
-            </div>
-          )}
-          <ListItemText primary={isUndef(user.nickname) ? '未登录' : user.nickname} />
+              <Avatar className="avatar" src={user.avatarUrl} />
+            </div>) :
+            <AccountCircleIcon className="user-icon" />
+          }
+          <ListItemText primary={isLogin ? user.nickname : '未登录'} />
         </ListItem>
       </List>
       <Divider variant="middle" />
       <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <DraftsIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+        {router.map(route => (
+          <Link to={route.path} key={route.name}>
+            <ListItem button onClick={handleCloseMenu}>
+              <ListItemIcon><route.meta.icon /></ListItemIcon>
+              <ListItemText primary={route.meta.title} />
+            </ListItem>
+          </Link>
         ))}
       </List>
     </div>
@@ -76,19 +114,3 @@ function Menu({ showMenu, setShowMenu, setShowLoginPage, user }) {
     </>
   )
 }
-
-const mapStateToProps = state => {
-  return {
-    showMenu: state.commonReducer.showMenu,
-    user: state.userReducer.user
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    setShowMenu: showMenu => dispatch(setShowMenu(showMenu)),
-    setShowLoginPage: showLoginPage => dispatch(setShowLoginPage(showLoginPage))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Menu)

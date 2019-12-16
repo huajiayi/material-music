@@ -8,7 +8,6 @@ module.exports = function override(config, env) {
     loader: 'sass-resources-loader',
     options: {
       resources: [
-        // 这里按照你的文件路径填写
         resolve('src/style/mixin.scss'),
         resolve('src/style/variables.scss')
       ]
@@ -17,5 +16,6 @@ module.exports = function override(config, env) {
 
   // 路径别名
   config.resolve.alias['@'] = resolve('src')
+
   return config;
 }

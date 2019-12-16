@@ -3,16 +3,19 @@ import './index.scss'
 import Header from './Header'
 import Menu from './Menu'
 import Main from './Main'
+import { BrowserRouter as Router } from "react-router-dom"
 
 export default function Layout() {
 
   return (
-    <div className='layout'>
-      <Menu />
-      <div className='container'>
-        <Header />
-        <Main />
+    <Router>
+      <div className='layout'>
+        <Menu />
+        <div className='container'>
+          <Header />
+          <Main />
+        </div>
       </div>
-    </div>
+    </Router>
   )
 }

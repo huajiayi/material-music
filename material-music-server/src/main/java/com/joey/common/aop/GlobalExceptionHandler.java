@@ -6,6 +6,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,17 +20,22 @@ import javax.servlet.http.HttpServletRequest;
 public class GlobalExceptionHandler {
 
     /**
-    * @Description: 处理参数不匹配的异常
-    * @Param: [request, e]
-    * @return: com.example.demo.common.response.Response
-    */
+     * @Description: 处理参数不匹配的异常
+     * @Param: [request, e]
+     * @return: com.example.demo.common.response.Response
+     */
+    @ExceptionHandler(BindException.class)
+    public Response handleBindException(HttpServletRequest request, BindException e) {
+        return Response.failure(Result.PARAM_NOT_MATCH);
+    }
+
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Response handleMissingServletRequestParameterException(HttpServletRequest request, MissingServletRequestParameterException e) {
         return Response.failure(Result.PARAM_NOT_MATCH);
     }
 
     /**
-     * @Description: 处理用户未登录的异常
+     * @Description: 处理用户登录状态失效的异常
      * @Param: [request, e]
      * @return: com.example.demo.common.response.Response
      */
@@ -58,11 +64,6 @@ public class GlobalExceptionHandler {
         return Response.failure(Result.USER_LOGIN_ERROR);
     }
 
-    /**
-     * @Description: 处理用户登录失败的异常
-     * @Param: [request, e]
-     * @return: com.example.demo.common.response.Response
-     */
     @ExceptionHandler(UnknownAccountException.class)
     public Response handleUnknownAccountException(HttpServletRequest request, UnknownAccountException e) {
         return Response.failure(Result.USER_LOGIN_ERROR);

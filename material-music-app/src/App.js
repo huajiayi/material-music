@@ -1,12 +1,16 @@
 import React from 'react'
-import Layout from './layout'
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import { connect } from 'react-redux'
-import { setTheme } from '@/store/common/action'
-import Login from './page/Login'
-import Register from './page/Register'
+import { useSelector } from 'react-redux'
+import { SnackbarProvider } from 'notistack'
+import Layout from '@/layout'
+import Login from '@/page/Login'
+import Register from '@/page/Register'
+import Profile from '@/page/Profile'
+import { SnackbarUtilsConfigurator } from '@/components/Toast'
 
-function App({ theme, setTheme }) {
+export default function App() {
+
+  const theme = useSelector(state => state.commonReducer.theme)
 
   const usertheme = React.useMemo(
     () =>
@@ -20,23 +24,19 @@ function App({ theme, setTheme }) {
 
   return (
     <ThemeProvider theme={usertheme}>
-      <Layout />
-      <Login />
-      <Register />
+      <SnackbarProvider 
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+        autoHideDuration={2000}
+      >
+        <SnackbarUtilsConfigurator />
+        <Layout />
+        <Login />
+        <Register />
+        <Profile />
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }
-
-const mapStateToProps = state => {
-  return {
-    theme: state.commonReducer.theme
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    setTheme: theme => dispatch(setTheme(theme))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
