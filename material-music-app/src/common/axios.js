@@ -3,7 +3,7 @@ import Toast from '@/components/Toast'
 
 const createMusicInstance = () => {
   const musicInstance = axios.create({
-    baseURL: 'http://10.20.21.248:3001'
+    baseURL: 'http://localhost:3001'
   })
 
   musicInstance.interceptors.response.use(res => {
@@ -18,10 +18,12 @@ const createMusicInstance = () => {
 
 export const musicInstance = createMusicInstance()
 
-if(process.env.NODE_ENV === 'production') process.env.BASE_URL = ""
+// if(process.env.NODE_ENV === 'production') process.env.BASE_URL = 'http://localhost:8081'
+// console.log(process.env.BASE_URL)
 
 const instance = axios.create({
-  baseURL: process.env.BASE_URL
+  baseURL: process.env.BASE_URL,
+  withCredentials: true
 })
 
 instance.interceptors.response.use(res => {

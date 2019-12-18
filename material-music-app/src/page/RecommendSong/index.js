@@ -1,42 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Grid from '@material-ui/core/Grid'
 import SongCard from '@/components/SongCard'
 import SongCardSkeleton from '@/components/SongCardSkeleton'
-import { getNewSongs } from '@/api'
-import Title from '@/components/Title'
+import Grid from '@material-ui/core/Grid'
+import { getTopSongs } from '@/api'
 import useIO from '@/hook/useIO'
 import './index.scss'
 
-export default function NewSong() {
-
+export default function RecommendSong() {
   const [loading, setLoading] = useState(true)
   const [list, setList] = useState([])
-  const NewSongRef = useRef(null)
+  const RecommendSongRef = useRef(null)
 
   const [observer, setElements, entries] = useIO({
     threshold: 0.25,
     root: null
   })
+  
 
   useEffect(() => {
     const fetchData = async () => {
-      const { result } = await getNewSongs()
-      setList(result)
+      const { data } = await getTopSongs(0)
+      setList(data)
       setLoading(false)
     }
     fetchData()
   }, [])
 
   useEffect(() => {
-    if (!loading && NewSongRef) {
-      let imgs = Array.from(NewSongRef.current.getElementsByClassName('lazy'))
+    if(!loading && RecommendSongRef) {
+      let imgs = Array.from(RecommendSongRef.current.getElementsByClassName('lazy'))
       setElements(imgs)
     }
-  }, [list, loading, setElements])
+  }, [list, RecommendSongRef, loading, setElements])
 
   useEffect(() => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
+      if(entry.isIntersecting) {
         let lazyImage = entry.target
         lazyImage.src = lazyImage.dataset.src
         lazyImage.classList.remove("lazy")
@@ -47,22 +46,21 @@ export default function NewSong() {
 
   return (
     <>
-      <Title>最新音乐</Title>
-      <Grid ref={NewSongRef} container>
-        {loading ? Array.from(new Array(10)).map((item, index) => (
+      <Grid ref={RecommendSongRef} container className="test">
+        {loading ? Array.from(new Array(14)).map((item, index) => (
           <Grid className="recommend-song-card-wrap" container item xs={12} md={6} key={index}>
             <SongCardSkeleton />
           </Grid>)) :
-          list.map((songWrap, index) => (
-            <Grid className="discovery-song-card-wrap" container item xs={12} md={6} key={songWrap.id}>
-              <SongCard
-                id={index + 1}
-                name={songWrap.song.name}
-                picUrl={songWrap.picUrl}
-                author={songWrap.song.artists[0].name}
-                album={songWrap.song.album.name}
-              />
-            </Grid>))}
+        list.map((songWrap, index) =>(
+          <Grid className="recommend-song-card-wrap" container item xs={12} md={6} key={songWrap.id}>
+            <SongCard
+            id={index + 1}
+            name={songWrap.name}
+            picUrl={songWrap.album.picUrl}
+            author={songWrap.artists[0].name}
+            album={songWrap.album.name}
+            />
+          </Grid>))}
       </Grid>
     </>
   )
