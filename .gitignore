@@ -4,10 +4,10 @@
 /material-music-app/node_modules
 
 # testing
-/material-music-app//coverage
+/material-music-app/coverage
 
 # production
-/material-music-app//build
+/material-music-app/build
 
 # misc
 /material-music-app/.DS_Store
@@ -42,11 +42,11 @@
 /material-music-server/*.ipr
 
 ### NetBeans ###
-/material-music-server//nbproject/private/
-/material-music-server//nbbuild/
-/material-music-server//dist/
-/material-music-server//nbdist/
-/material-music-server//.nb-gradle/
+/material-music-server/nbproject/private/
+/material-music-server/nbbuild/
+/material-music-server/dist/
+/material-music-server/nbdist/
+/material-music-server/.nb-gradle/
 /material-music-server/build/
 
 ### VS Code ###
