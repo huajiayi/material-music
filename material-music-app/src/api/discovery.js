@@ -1,7 +1,7 @@
 import { musicInstance as axios } from '@/common/axios'
 
-export const getPersonalized = params => axios.get(`/personalized`, { params })
+// 获取个性推荐
+export const getPersonalized = params => axios.get(`/music-api/personalized`, { params })
 
-export const getNewSongs = () => axios.get('/personalized/newsong')
-
-export const getPersonalizedMv = () => axios.get(`/personalized/mv`)
+// 获取最新歌曲
+export const getNewSongs = () => axios.get('/music-api/personalized/newsong')

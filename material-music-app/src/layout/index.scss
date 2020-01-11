@@ -9,3 +9,11 @@
   }
 }
 
+.player-wrap {
+  position: absolute;
+  bottom: -70px;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  transition: bottom .5s;
+}

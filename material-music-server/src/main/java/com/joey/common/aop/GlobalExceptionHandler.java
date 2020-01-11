@@ -6,6 +6,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -31,6 +32,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public Response handleMissingServletRequestParameterException(HttpServletRequest request, MissingServletRequestParameterException e) {
+        return Response.failure(Result.PARAM_NOT_MATCH);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public Response handleHttpMessageNotReadableException(HttpServletRequest request, HttpMessageNotReadableException e) {
         return Response.failure(Result.PARAM_NOT_MATCH);
     }
 

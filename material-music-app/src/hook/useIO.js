@@ -25,7 +25,6 @@ const useIO = (options) => {
 		}
 		return () => {
 			if (observer.current) {
-        console.log('disconnect')
 				observer.current.disconnect()
 			}
 		}

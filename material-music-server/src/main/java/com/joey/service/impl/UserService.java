@@ -4,30 +4,41 @@ import com.joey.common.constant.Base;
 import com.joey.common.response.Response;
 import com.joey.common.response.Result;
 import com.joey.common.util.PasswordHelper;
-import com.joey.dao.IUserDao;
+import com.joey.dao.IUserDAO;
+import com.joey.dao.IUserSongListDAO;
 import com.joey.dto.RegisterDTO;
 import com.joey.model.User;
 import com.joey.service.IUserService;
+import com.joey.vo.SongListVO;
 import com.joey.vo.UserVO;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Service
 public class UserService implements IUserService {
 
     @Autowired
-    private IUserDao userDao;
+    private IUserDAO userDAO;
+
+    @Autowired
+    private IUserSongListDAO userSongListDAO;
 
     @Autowired
     private FileStorageService fileStorageService;
 
-    private static final String MAPPING = "/user/avatar/";
+    private final static String UPLOAD_DIR = "avatar";
+
+    private final static String MAPPER = "/user/" + UPLOAD_DIR + "/";
 
     /**
      * @Description: 注册
@@ -36,12 +47,16 @@ public class UserService implements IUserService {
      */
     @Override
     public Response register(RegisterDTO registerDTO) {
-        int resultCount = userDao.checkUsername(registerDTO.getUsername());
+        int resultCount = userDAO.checkUsername(registerDTO.getUsername());
         if(resultCount > 0) {
             return Response.failure(Result.USER_HAS_EXISTED);
         }
 
-        String fileName = fileStorageService.storeFile(registerDTO.getAvatar(), null);
+        MultipartFile avatar = registerDTO.getAvatar();
+        if(avatar == null) {
+            return Response.failure(Result.PARAM_NOT_MATCH);
+        }
+        String fileName = fileStorageService.storeFile(avatar, UPLOAD_DIR, null);
 
         User user = new User();
         user.setUsername(registerDTO.getUsername());
@@ -50,7 +65,7 @@ public class UserService implements IUserService {
         user.setAvatarUrl(fileName);
 
         PasswordHelper.encryptPassword(user);
-        userDao.insert(user);
+        userDAO.insert(user);
 
         return Response.success();
     }
@@ -89,25 +104,21 @@ public class UserService implements IUserService {
      */
     @Override
     public Response updateUserInfo(RegisterDTO registerDTO) {
-        Subject subject = SecurityUtils.getSubject();
-        String username = (String)subject.getPrincipal();
-
-        if(username == null) {
+        User user = getCurrentUser();
+        if(user == null) {
             throw new UnauthenticatedException();
         }
 
-        User user = userDao.findByUsername(username);
-
         MultipartFile avatar = registerDTO.getAvatar();
         if(avatar != null) {
-            fileStorageService.storeFile(registerDTO.getAvatar(), user.getAvatarUrl());
+            fileStorageService.storeFile(registerDTO.getAvatar(), UPLOAD_DIR, user.getAvatarUrl());
         }
 
         user.setPassword(registerDTO.getPassword());
         user.setNickname(registerDTO.getNickname());
 
         PasswordHelper.encryptPassword(user);
-        userDao.update(user);
+        userDAO.update(user);
 
         return Response.success();
     }
@@ -119,20 +130,13 @@ public class UserService implements IUserService {
      */
     @Override
     public Response<UserVO> getUserInfo() {
-        Subject subject = SecurityUtils.getSubject();
-        String username = (String)subject.getPrincipal();
-
-        if(username == null) {
+        User user = getCurrentUser();
+        if(user == null) {
             throw new UnauthenticatedException();
         }
 
-        User user = userDao.findByUsername(username);
-        UserVO userVO = new UserVO();
-        userVO.setId(user.getId());
-        userVO.setUsername(user.getUsername());
-        userVO.setPassword(user.getPassword());
-        userVO.setNickname(user.getNickname());
-        String fileUri = fileStorageService.getFileUrl(MAPPING, user.getAvatarUrl());
+        UserVO userVO = new UserVO(user);
+        String fileUri = fileStorageService.getFileUrl(MAPPER, user.getAvatarUrl());
         userVO.setAvatarUrl(fileUri);
 
         return Response.success(userVO);
@@ -145,14 +149,24 @@ public class UserService implements IUserService {
      */
     @Override
     public Response<UserVO> getOtherUserInfo(int id) {
-        User user = userDao.findById(id);
-        UserVO userVO = new UserVO();
-        userVO.setId(id);
-        userVO.setNickname(user.getNickname());
-        String fileUri = fileStorageService.getFileUrl(MAPPING, user.getAvatarUrl());
+        User user = userDAO.findById(id);
+        UserVO userVO = new UserVO(user);
+        String fileUri = fileStorageService.getFileUrl(MAPPER, user.getAvatarUrl());
         userVO.setAvatarUrl(fileUri);
 
         return Response.success(userVO);
+    }
+
+    /**
+     * @Description: 获取用户歌单
+     * @Param: []
+     * @return: com.joey.common.response.Response<java.util.List < com.joey.vo.SongListVO>>
+     */
+    @Override
+    public Response<List<SongListVO>> getUserSongLists(int userId) {
+        List<SongListVO> songListVOs = userSongListDAO.findByUserId(userId);
+
+        return Response.success(songListVOs);
     }
 
     /**
@@ -163,5 +177,33 @@ public class UserService implements IUserService {
     @Override
     public Response<String> getDefaultAvatarUrl() {
         return Response.success(Base.DEFAULT_AVATAR_URL);
+    }
+
+    /** 
+    * @Description: 返回图片资源
+    * @Param: [fileName, request] 
+    * @return: org.springframework.http.ResponseEntity<org.springframework.core.io.Resource> 
+    */ 
+    @Override
+    public ResponseEntity<Resource> loadFileAsResource(String fileName, HttpServletRequest request) {
+        return fileStorageService.loadFileAsResource(UPLOAD_DIR, fileName, request);
+    }
+
+    /**
+    * @Description: 获取当前用户
+    * @Param: []
+    * @return: com.joey.model.User
+    */
+    public User getCurrentUser() {
+        Subject subject = SecurityUtils.getSubject();
+        String username = (String)subject.getPrincipal();
+
+        if(username == null) {
+            return null;
+        }
+
+        User user = userDAO.findByUsername(username);
+
+        return user;
     }
 }

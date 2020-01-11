@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { useLocation } from "react-router-dom"
+import { useLocation } from 'react-router-dom'
 import router from '@/common/router'
 import './index.scss'
 import { useDispatch } from 'react-redux'
@@ -20,7 +20,8 @@ export default function Header() {
   const openDrawer = useCallback(() => dispatch(setShowMenu(true)), [dispatch])
 
   useEffect(() => {
-    setTitle(router.find(route => route.path === location.pathname).meta.title)
+    let route = router.menu.find(route => route.path === location.pathname)
+    route && setTitle(route.meta.title)
   }, [location])
 
   return (

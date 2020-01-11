@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Mapper
 @Repository
-public interface IUserDao {
+public interface IUserDAO {
 
     @Select("select * from user where id=#{id}")
     User findById(int id);

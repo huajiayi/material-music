@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import { useSelector, useDispatch } from 'react-redux'
-import { setShowRegisterPage, setShowLoginPage } from '@/store/common/action'
+import { setShowRegisterPage } from '@/store/common/action'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
 import Input from '@material-ui/core/Input'
@@ -18,10 +18,13 @@ import defaultAvatar from '@/assets/img/defaultAvatar.jpg'
 import { register } from '@/api'
 import Toast from '@/components/Toast'
 import { base64toBlob } from '@/common/utils'
+import { useLocation, useHistory } from 'react-router-dom'
 
 export default function Register() {
 
   const dispatch = useDispatch()
+  const history = useHistory()
+  const location = useLocation()
 
   const [avatar, setAvatar] = useState(defaultAvatar)
   const [username, setUsername] = useState('')
@@ -32,7 +35,6 @@ export default function Register() {
 
   const showRegisterPage = useSelector(state => state.commonReducer.showRegisterPage)
 
-  const _setShowLoginPage = useCallback(showLoginPage => dispatch(setShowLoginPage(showLoginPage)), [dispatch])
   const _setShowRegisterPage = useCallback(showRegisterPage => dispatch(setShowRegisterPage(showRegisterPage)), [dispatch])
 
   const handleChangeAvatar = useCallback(() => avatarInput.current.click(), [])
@@ -78,20 +80,22 @@ export default function Register() {
     data.append('nickname', nickname)
     const isSuccess = await register(data)
     if(isSuccess) {
-      _setShowRegisterPage(false)
-      _setShowLoginPage(true)
+      history.push('/login')
     }
-  }, [_setShowLoginPage, _setShowRegisterPage, avatar, nickname, password, username])
+  }, [avatar, history, nickname, password, username])
 
   useEffect(() => {
     reset()
-  }, [reset, showRegisterPage])
+  }, [reset])
+
+  useEffect(() => {
+    _setShowRegisterPage(location.pathname === '/register' ? true : false) 
+  }, [_setShowRegisterPage, location])
 
   return (
     <ResponsiveDialog
       title="注册"
       showDialog={showRegisterPage}
-      setShowDialog={_setShowRegisterPage}
     >
       <DialogContent>
         <input className="avatar-input" ref={avatarInput} type="file" accept="image/*" onChange={handleAvatarChanged}></input>

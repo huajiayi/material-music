@@ -1,54 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Grid from '@material-ui/core/Grid'
 import SongListCard from '@/components/SongListCard'
 import SongCardListSkeleton from '@/components/SongCardListSkeleton'
 import { getPersonalized } from '@/api'
 import Title from '@/components/Title'
-import useIO from '@/hook/useIO'
+import useRequest from '@/hook/useRequest'
+import useLazyLoad from '@/hook/useLazyLoad'
 import './index.scss'
 
 export default function NewSongList() {
 
-  const [loading, setLoading] = useState(true)
   const [list, setList] = useState([])
-  const NewSongListRef = useRef(null)
-
-  const [observer, setElements, entries] = useIO({
-    threshold: 0.25,
-    root: null
-  })
+  const [data, loading] = useRequest(useCallback(() => getPersonalized({ limit: 12 }), []))
+  const ref = useLazyLoad(loading)
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { result } = await getPersonalized({ limit: 12 })
-      setList(result)
-      setLoading(false)
-    }
-    fetchData()
-  }, [])
-
-  useEffect(() => {
-    if (!loading && NewSongListRef) {
-      let imgs = Array.from(NewSongListRef.current.getElementsByClassName('lazy'))
-      setElements(imgs)
-    }
-  }, [list, loading, setElements])
-
-  useEffect(() => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        let lazyImage = entry.target
-        lazyImage.src = lazyImage.dataset.src
-        lazyImage.classList.remove("lazy")
-        observer.unobserve(lazyImage)
-      }
-    })
-  }, [entries, observer])
+    setList(data.result)
+  }, [data])
 
   return (
     <>
       <Title>推荐歌单</Title>
-      <Grid ref={NewSongListRef} container>
+      <Grid ref={ref} container>
         {loading ? Array.from(new Array(12)).map((item, index) => (
           <Grid className="recommend-song-card-wrap" container item xs={4} sm={4} md={3} lg={2} key={index}>
             <SongCardListSkeleton />

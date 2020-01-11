@@ -4,5 +4,6 @@ export default {
   menu_bgcolor: '--menu-bgcolor',
   main_bgcolor: '--main-bgcolor',
   scrollbar_color: '--scrollbar-color',
-  input_color: '--input-color'
+  input_color: '--input-color',
+  progress_color: '--progress-color'
 }

@@ -6,7 +6,9 @@ import java.util.Date;
 
 public class Song {
 
-    private int id;
+    private Integer id;
+
+    private Integer neteaseId;
 
     private String name;
 
@@ -28,12 +30,20 @@ public class Song {
     @JsonIgnore
     private Date updateTime;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getNeteaseId() {
+        return neteaseId;
+    }
+
+    public void setNeteaseId(Integer neteaseId) {
+        this.neteaseId = neteaseId;
     }
 
     public String getName() {

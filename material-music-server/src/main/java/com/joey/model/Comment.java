@@ -4,19 +4,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
 
-public class SongComment {
+public class Comment {
 
-    private int id;
+    private Integer id;
 
-    private int songId;
+    private Integer topicId;
 
-    private int userId;
+    private Integer topicType;
+
+    private Integer userId;
 
     private String content;
 
-    private int likeCount;
+    private Integer likeCount;
 
-    private int beRepliedCommentId;
+    private Integer beRepliedCommentId;
 
     @JsonIgnore
     private Date createTime;
@@ -24,27 +26,35 @@ public class SongComment {
     @JsonIgnore
     private Date updateTime;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getSongId() {
-        return songId;
+    public Integer getTopicId() {
+        return topicId;
     }
 
-    public void setSongId(int songId) {
-        this.songId = songId;
+    public void setTopicId(Integer topicId) {
+        this.topicId = topicId;
     }
 
-    public int getUserId() {
+    public Integer getTopicType() {
+        return topicType;
+    }
+
+    public void setTopicType(Integer topicType) {
+        this.topicType = topicType;
+    }
+
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -56,19 +66,19 @@ public class SongComment {
         this.content = content;
     }
 
-    public int getLikeCount() {
+    public Integer getLikeCount() {
         return likeCount;
     }
 
-    public void setLikeCount(int likeCount) {
+    public void setLikeCount(Integer likeCount) {
         this.likeCount = likeCount;
     }
 
-    public int getBeRepliedCommentId() {
+    public Integer getBeRepliedCommentId() {
         return beRepliedCommentId;
     }
 
-    public void setBeRepliedCommentId(int beRepliedCommentId) {
+    public void setBeRepliedCommentId(Integer beRepliedCommentId) {
         this.beRepliedCommentId = beRepliedCommentId;
     }
 

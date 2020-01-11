@@ -1,21 +1,21 @@
 package com.joey.controller;
 
 import com.joey.common.response.Response;
+import com.joey.common.response.Result;
 import com.joey.dto.RegisterDTO;
 import com.joey.model.User;
-import com.joey.service.impl.FileStorageService;
 import com.joey.service.impl.UserService;
+import com.joey.vo.SongListVO;
 import com.joey.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -23,9 +23,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private FileStorageService fileStorageService;
 
     @PostMapping("/register")
     public Response register(@Valid @ModelAttribute RegisterDTO registerDTO) {
@@ -39,7 +36,6 @@ public class UserController {
 
     @GetMapping("/logout")
     public Response logout() {
-        System.out.println("asd");
         return userService.logout();
     }
 
@@ -60,30 +56,16 @@ public class UserController {
 
     @GetMapping("/avatar/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
-        // Load file as Resource
-        Resource resource = fileStorageService.loadFileAsResource(fileName);
-
-        // Try to determine file's content type
-        String contentType = null;
-        try {
-            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        // Fallback to the default content type if type could not be determined
-        if(contentType == null) {
-            contentType = "application/octet-stream";
-        }
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
+        return userService.loadFileAsResource(fileName, request);
     }
 
-    @GetMapping("default-avatar-url")
+    @GetMapping("/default-avatar-url")
     public Response<String> getDefaultAvatarUrl() {
         return userService.getDefaultAvatarUrl();
+    }
+
+    @GetMapping("/song-list")
+    public Response<List<SongListVO>> getUserSongLists(@RequestParam int userId) {
+        return userService.getUserSongLists(userId);
     }
 }

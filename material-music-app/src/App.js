@@ -2,6 +2,7 @@ import React from 'react'
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { useSelector } from 'react-redux'
 import { SnackbarProvider } from 'notistack'
+import { BrowserRouter as Router } from 'react-router-dom'
 import Layout from '@/layout'
 import Login from '@/page/Login'
 import Register from '@/page/Register'
@@ -31,12 +32,14 @@ export default function App() {
         }}
         autoHideDuration={2000}
       >
-        <SnackbarUtilsConfigurator />
-        <Layout />
-        <Login />
-        <Register />
-        <Profile />
+        <Router>
+          <SnackbarUtilsConfigurator />
+          <Layout />
+          <Login />
+          <Register />
+          <Profile />
+        </Router>
       </SnackbarProvider>
     </ThemeProvider>
-  );
+  )
 }

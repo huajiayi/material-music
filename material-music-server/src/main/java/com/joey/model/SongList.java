@@ -7,27 +7,26 @@ import java.util.List;
 
 public class SongList {
 
-    private int id;
+    private Integer id;
 
     private String name;
 
     private String picUrl;
 
-    private int collectCount;
+    private Integer collectCount;
 
-    private int craetorId;
+    private Integer creatorId;
 
-    @JsonIgnore
     private Date createTime;
 
     @JsonIgnore
     private Date updateTime;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -47,20 +46,20 @@ public class SongList {
         this.picUrl = picUrl;
     }
 
-    public int getCollectCount() {
+    public Integer getCollectCount() {
         return collectCount;
     }
 
-    public void setCollectCount(int collectCount) {
+    public void setCollectCount(Integer collectCount) {
         this.collectCount = collectCount;
     }
 
-    public int getCraetorId() {
-        return craetorId;
+    public Integer getCreatorId() {
+        return creatorId;
     }
 
-    public void setCraetorId(int craetorId) {
-        this.craetorId = craetorId;
+    public void setCreatorId(Integer creatorId) {
+        this.creatorId = creatorId;
     }
 
     public Date getCreateTime() {

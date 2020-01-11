@@ -1,4 +1,4 @@
-import variables from './variables';
+import variables from './variables'
 
 export default {
   name: 'light',
@@ -15,6 +15,9 @@ export default {
     [variables.menu_bgcolor]: '#fff',
 
     //main
-    [variables.main_bgcolor]: '#eee'
+    [variables.main_bgcolor]: '#eee',
+    
+    // progressBar
+    [variables.progress_color]: '#ff4d4f'
   }
 }

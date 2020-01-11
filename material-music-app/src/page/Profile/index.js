@@ -17,10 +17,14 @@ import ResponsiveDialog from '../../components/ResponsiveDialog'
 import Avatar from '@material-ui/core/Avatar'
 import { logout, updateUserInfo } from '@/api'
 import Toast from '@/components/Toast'
+import { useHistory, useLocation } from 'react-router-dom'
+import { customLocation } from '@/hook/useCustomLocation'
 
 export default function Register() {
 
   const dispatch = useDispatch()
+  const location = useLocation()
+  const history = useHistory()
 
   const [avatar, setAvatar] = useState('')
   const [username, setUsername] = useState('')
@@ -66,9 +70,9 @@ export default function Register() {
     if(isSuccess) {
       localStorage.removeItem("userId")
       _setUser({})
-      _setShowProfilePage(false)
+      history.push(customLocation.pathname)
     }
-  }, [_setShowProfilePage, _setUser])
+  }, [_setUser, history])
   const handleConfirm = useCallback(async () => {
     if(username === '' || password === '' || nickname === '') {
       Toast.error('值不能为空')
@@ -87,10 +91,10 @@ export default function Register() {
         password,
         nickname
       })
-      _setShowProfilePage(false)
       setCanEdit(false)
+      history.push(customLocation.pathname)
     }
-  }, [_setShowProfilePage, _setUser, avatar, nickname, password, user, username])
+  }, [_setUser, avatar, history, nickname, password, user, username])
 
   useEffect(() => {
     if(!showProfilePage) {
@@ -103,11 +107,14 @@ export default function Register() {
     setNickname(user.nickname || '')
   }, [user, showProfilePage])
 
+  useEffect(() => {
+    _setShowProfilePage(location.pathname === '/profile' ? true : false) 
+  }, [_setShowProfilePage, location])
+
   return (
     <ResponsiveDialog
       title="个人信息"
       showDialog={showProfilePage}
-      setShowDialog={_setShowProfilePage}
     >
       <DialogContent>
         <input className="avatar-input" ref={avatarInput} type="file" accept="image/*" onChange={handleAvatarChanged}></input>

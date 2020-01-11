@@ -1,6 +1,6 @@
 package com.joey.common.shiro;
 
-import com.joey.dao.IUserDao;
+import com.joey.dao.IUserDAO;
 import com.joey.model.User;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -19,7 +19,7 @@ import java.util.Set;
 public class ShiroRealm extends AuthorizingRealm {
 
     @Autowired
-    private IUserDao userDao;
+    private IUserDAO userDao;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {

@@ -1,4 +1,4 @@
-import variables from './variables';
+import variables from './variables'
 
 export default {
   name: 'red',

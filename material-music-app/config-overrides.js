@@ -17,5 +17,5 @@ module.exports = function override(config, env) {
   // 路径别名
   config.resolve.alias['@'] = resolve('src')
 
-  return config;
+  return config
 }

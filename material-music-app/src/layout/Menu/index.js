@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setShowMenu, setShowLoginPage, setShowProfilePage } from '@/store/common/action'
+import { setShowMenu } from '@/store/common/action'
 import { setUser } from '@/store/user/action'
 import { isEmptyObj } from '@/common/utils'
 import './index.scss'
@@ -13,13 +13,15 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Divider from '@material-ui/core/Divider'
 import Avatar from '@material-ui/core/Avatar'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom'
 import router from '@/common/router'
 import { getUserInfo } from '@/api'
+import { useHistory } from 'react-router-dom'
 
 export default function Menu() {
 
   const dispatch = useDispatch()
+  let history = useHistory()
   
   const [isLogin, setIsLogin] = useState(false)
 
@@ -27,19 +29,13 @@ export default function Menu() {
   const user = useSelector(state => state.userReducer.user)
 
   const closeMenu = useCallback(() => dispatch(setShowMenu(false)), [dispatch])
-  const showLoginPage = useCallback(() => dispatch(setShowLoginPage(true)), [dispatch])
-  const showProfilePage = useCallback(() => dispatch(setShowProfilePage(true)), [dispatch])
   const _setUser = useCallback(user => dispatch(setUser(user)), [dispatch])
 
-  const handleCloseMenu = useCallback(() => closeMenu(false), [closeMenu])
+  const handleCloseMenu = useCallback(() => closeMenu(), [closeMenu])
   const handleClickAvatar = useCallback(() => {
-    if(isLogin) {
-      showProfilePage()
-    }else {
-      showLoginPage()
-    }
+    history.push(isLogin ? '/profile' : '/login')
     handleCloseMenu()
-  }, [handleCloseMenu, isLogin, showLoginPage, showProfilePage])
+  }, [handleCloseMenu, history, isLogin])
 
   useEffect(() => {
     const init = async () => {
@@ -76,7 +72,7 @@ export default function Menu() {
       </List>
       <Divider variant="middle" />
       <List>
-        {router.map(route => (
+        {router.menu.map(route => (
           <Link to={route.path} key={route.name}>
             <ListItem button onClick={handleCloseMenu}>
               <ListItemIcon><route.meta.icon /></ListItemIcon>

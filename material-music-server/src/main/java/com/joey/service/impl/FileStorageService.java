@@ -2,18 +2,18 @@ package com.joey.service.impl;
 
 import com.joey.common.exception.FileStorageException;
 import com.joey.common.properties.FileStorageProperties;
-import com.joey.common.response.Response;
 import com.joey.service.IFileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.File;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -44,7 +44,7 @@ public class FileStorageService implements IFileStorageService {
     * @return: java.lang.String
     */
     @Override
-    public String storeFile(MultipartFile file, String fileName) {
+    public String storeFile(MultipartFile file, String directory, String fileName) {
         // Normalize file name
         if(fileName == null) {
             fileName = getUUIDFileName(file.getOriginalFilename());
@@ -57,13 +57,41 @@ public class FileStorageService implements IFileStorageService {
             }
 
             // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            Files.createDirectories(this.fileStorageLocation.resolve(directory));
+            Path targetLocation = this.fileStorageLocation.resolve(directory).resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             return fileName;
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
+    }
+
+    /** 
+    * @Description: 返回图片
+    * @Param: [directory, fileName, request] 
+    * @return: org.springframework.http.ResponseEntity<org.springframework.core.io.Resource> 
+    */ 
+    public ResponseEntity<Resource> loadFileAsResource(String directory, String fileName, HttpServletRequest request) {
+        Resource resource = loadFileAsResource(directory + "/" + fileName);
+
+        // Try to determine file's content type
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        // Fallback to the default content type if type could not be determined
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 
     /**
@@ -92,9 +120,9 @@ public class FileStorageService implements IFileStorageService {
     * @return: java.lang.String 
     */ 
     @Override
-    public String getFileUrl(String mapping, String fileName) {
+    public String getFileUrl(String uploadDir, String fileName) {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(mapping) // 和控制器对应路径相同
+                .path("/" + uploadDir + "/")
                 .path(fileName)
                 .toUriString();
     }

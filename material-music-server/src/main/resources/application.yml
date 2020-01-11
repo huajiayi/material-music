@@ -30,4 +30,11 @@ mybatis:
   config-location: classpath:mybatis.cfg.xml
 
 file:
-  upload-dir: /user/avatar
+  upload-dir: /material-music-resource
+
+# 分页配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql

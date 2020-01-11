@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import { useSelector, useDispatch } from 'react-redux'
-import { setShowLoginPage, setShowRegisterPage } from '@/store/common/action'
+import { setShowLoginPage } from '@/store/common/action'
 import { setUser } from '@/store/user/action'
 import FormControl from '@material-ui/core/FormControl'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -16,10 +16,14 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import ResponsiveDialog from '../../components/ResponsiveDialog'
 import { login } from '@/api'
 import Toast from '@/components/Toast'
+import { useLocation, useHistory } from 'react-router-dom'
+import { customLocation } from '@/hook/useCustomLocation'
 
 export default function Login() {
 
   const dispatch = useDispatch()
+  const location = useLocation()
+  const history = useHistory()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -28,7 +32,6 @@ export default function Login() {
   const showLoginPage = useSelector(state => state.commonReducer.showLoginPage)
 
   const _setShowLoginPage = useCallback(showLoginPage => dispatch(setShowLoginPage(showLoginPage)), [dispatch])
-  const _setShowRegisterPage = useCallback(showRegisterPage => dispatch(setShowRegisterPage(showRegisterPage)), [dispatch])
   const _setUser = useCallback(user => dispatch(setUser(user)), [dispatch])
 
   const handleChangeUsername = useCallback(e => setUsername(e.target.value), [])
@@ -41,9 +44,8 @@ export default function Login() {
     setShowPassword(false)
   }, [])
   const handleRegister = useCallback(() => {
-    _setShowLoginPage(false)
-    _setShowRegisterPage(true)
-  }, [_setShowLoginPage, _setShowRegisterPage])
+    history.push('/register')
+  }, [history])
   const handleConfirm = useCallback(async () => {
     if(username === '' || password === '') {
       Toast.error('值不能为空')
@@ -58,20 +60,23 @@ export default function Login() {
         ...user,
         password
       })
-      _setShowLoginPage(false)
       localStorage.setItem("userId", user.id)
+      history.push(customLocation.pathname)
     }
-  }, [_setShowLoginPage, _setUser, password, username])
+  }, [_setUser, history, password, username])
 
   useEffect(() => {
     reset()
-  }, [reset, showLoginPage])
+  }, [reset])
+
+  useEffect(() => {
+    _setShowLoginPage(location.pathname === '/login' ? true : false) 
+  }, [_setShowLoginPage, location])
 
   return (
     <ResponsiveDialog
       title="登录"
       showDialog={showLoginPage}
-      setShowDialog={_setShowLoginPage}
     >
       <DialogContent>
         <FormControl className="form" fullWidth>

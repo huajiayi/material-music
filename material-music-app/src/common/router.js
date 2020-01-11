@@ -3,8 +3,25 @@ import RecommendSongList from '@/page/RecommendSongList'
 import RecommendSong from '@/page/RecommendSong'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic'
+import QueueMusicIcon from '@material-ui/icons/QueueMusic'
 
-export default [{
+export default {
+  global: [{
+    name: 'login',
+    path: '/login'
+  },
+  {
+    name: 'register',
+    path: '/register'
+  },
+  {
+    name: 'profile',
+    path: '/profile',
+    meta: {
+      needLogin: true
+    }
+  }],
+  menu: [{
     name: 'Discovery',
     path: '/',
     exact: true,
@@ -20,8 +37,8 @@ export default [{
     exact: false,
     component: RecommendSongList,
     meta: {
-      title: '最新歌单',
-      icon: LibraryMusicIcon
+      title: '推荐歌单',
+      icon: QueueMusicIcon
     }
   },
   {
@@ -33,5 +50,5 @@ export default [{
       title: '最新音乐',
       icon: LibraryMusicIcon
     }
-  }
-]
+  }]
+}
