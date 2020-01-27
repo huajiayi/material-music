@@ -22,14 +22,16 @@ jobs:
     - name: Run build task
       run: cd material-music-app && npm run build --if-present
     - name: Deploy to Server
-      uses: easingthemes/ssh-deploy@v2.0.7
+      uses: SamKirkland/FTP-Deploy-Action@2.0.0
       env:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-          ARGS: "-rltgoDzvO --delete"
-          SOURCE: "material-music-app/build/"
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: "/root/html/metarial-music/material-music-app/"
+        FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        METHOD: sftp
+        PORT: ${{ secrets.FTP_PORT }}
+        LOCAL_DIR: "material-music-app/build"
+        REMOTE_DIR: "/root/html/metarial-music/material-music-app"
+        ARGS: --delete
 
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
@@ -38,11 +40,13 @@ jobs:
     - name: Build with Maven
       run: cd material-music-server && mvn -B package --file pom.xml
     - name: Deploy to Server
-      uses: easingthemes/ssh-deploy@v2.0.7
+      uses: SamKirkland/FTP-Deploy-Action@2.0.0
       env:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-          ARGS: "-rltgoDzvO --delete"
-          SOURCE: "material-music-server/target"
-          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.REMOTE_USER }}
-          TARGET: "/root/html/metarial-music/material-music-server/"
+        FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        METHOD: sftp
+        PORT: ${{ secrets.FTP_PORT }}
+        LOCAL_DIR: "material-music-server/target"
+        REMOTE_DIR: "/root/html/metarial-music/material-music-server"
+        ARGS: --delete
