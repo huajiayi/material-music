@@ -29,9 +29,9 @@ jobs:
         FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         METHOD: sftp
         PORT: ${{ secrets.FTP_PORT }}
-        LOCAL_DIR: "material-music-app/build"
-        REMOTE_DIR: "/root/html/metarial-music/material-music-app"
-        ARGS: --delete
+        LOCAL_DIR: material-music-app/build
+        REMOTE_DIR: /root/html/metarial-music/material-music-app
+        ARGS: --delete --verbose --continue
 
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
@@ -47,6 +47,6 @@ jobs:
         FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         METHOD: sftp
         PORT: ${{ secrets.FTP_PORT }}
-        LOCAL_DIR: "material-music-server/target"
-        REMOTE_DIR: "/root/html/metarial-music/material-music-server"
-        ARGS: --delete
+        LOCAL_DIR: material-music-server/target
+        REMOTE_DIR: /root/html/metarial-music/material-music-server
+        ARGS: --delete --verbose --continue
