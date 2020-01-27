@@ -17,12 +17,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Go to material-music-app directory
-      run: cd material-music-app
     - name: Install npm dependencies
-      run: npm install
+      run: cd material-music-app && npm install
     - name: Run build task
-      run: npm run build --if-present
+      run: cd material-music-app && npm run build --if-present
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.0.7
       env:
@@ -37,10 +35,8 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Go to material-music-server directory
-      run: cd ../material-music-server
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: cd material-music-server && mvn -B package --file pom.xml
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.0.7
       env:
