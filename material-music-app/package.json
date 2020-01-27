@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.7.1",
+    "@material-ui/lab": "^4.0.0-alpha.40",
     "@material-ui/icons": "^4.5.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -12,6 +13,7 @@
     "http-proxy-middleware": "^0.20.0",
     "node-sass": "^4.13.0",
     "notistack": "^0.9.7",
+    "moment": "^2.24.0",
     "react": "^16.12.0",
     "react-app-rewired": "^2.1.5",
     "react-dom": "^16.12.0",
@@ -47,6 +49,5 @@
     ]
   },
   "devDependencies": {
-    "moment": "^2.24.0"
   }
 }
