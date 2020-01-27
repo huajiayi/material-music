@@ -38,7 +38,7 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Maven
-      run: cd material-music-server && mvn -B package --file pom.xml
+      run: cd material-music-server && mvn clean install
     - name: Deploy to Server
       uses: SamKirkland/FTP-Deploy-Action@2.0.0
       env:
