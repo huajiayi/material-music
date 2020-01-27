@@ -11,6 +11,8 @@ public class SongListDTO {
     @NotNull
     private MultipartFile songListPic;
 
+    private String description;
+
     public String getName() {
         return name;
     }
@@ -27,4 +29,11 @@ public class SongListDTO {
         this.songListPic = songListPic;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

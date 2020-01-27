@@ -1,0 +1,19 @@
+.send-input {
+  position: sticky;
+  top: 0;
+}
+
+.comments {
+  position: sticky;
+  top: -11px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: var(--main-bgcolor);
+  z-index: 9;
+}
+
+.no-more-text {
+  text-align: center;
+  margin-top: 10px;
+}

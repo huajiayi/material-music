@@ -1,6 +1,8 @@
 import Discovery from '@/page/Discovery'
 import RecommendSongList from '@/page/RecommendSongList'
 import RecommendSong from '@/page/RecommendSong'
+import SongListDetail from '@/page/SongListDetail'
+import MySongList from '@/page/MySongList'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic'
 import QueueMusicIcon from '@material-ui/icons/QueueMusic'
@@ -17,6 +19,13 @@ export default {
   {
     name: 'profile',
     path: '/profile',
+    meta: {
+      needLogin: true
+    }
+  },
+  {
+    name: 'addSongList',
+    path: '/add-song-list',
     meta: {
       needLogin: true
     }
@@ -38,7 +47,7 @@ export default {
     component: RecommendSongList,
     meta: {
       title: '推荐歌单',
-      icon: QueueMusicIcon
+      icon: LibraryMusicIcon
     }
   },
   {
@@ -48,7 +57,27 @@ export default {
     component: RecommendSong,
     meta: {
       title: '最新音乐',
-      icon: LibraryMusicIcon
+      icon: QueueMusicIcon
+    }
+  },
+  {
+    name: 'MySongList',
+    path: '/my-song-list',
+    exact: false,
+    component: MySongList,
+    meta: {
+      title: '我的歌单',
+      icon: LibraryMusicIcon,
+      needLogin: true
+    }
+  }],
+  page: [{
+    name: 'songList',
+    path: '/song-list/:id',
+    exact: false,
+    component: SongListDetail,
+    meta: {
+      title: '歌单详情'
     }
   }]
 }

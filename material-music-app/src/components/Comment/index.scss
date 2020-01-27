@@ -1,0 +1,66 @@
+.comment {
+  display:flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
+  
+  .comment-img-warp {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    margin-left: 10px;
+    
+    .comment-img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  
+  .comment-warp {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin-left: 10px;
+  
+    .comment-name {
+      font-size: 14px;
+      @include text-ellipsis-multi(1);
+    }
+  
+    .comment-date {
+      font-size: 12px;
+      margin-top: 5px;
+    }
+  }
+
+  .like-icon {
+    font-size: 16px;
+    margin-left: 5px;
+    cursor: pointer;
+  }
+
+  .liked {
+    color: red;
+  }
+}
+
+.comment-content-warp {
+  margin: 5px 0 0 60px;
+
+  .comment-be-replyed {
+    margin-top: 10px;
+    border-left: 2px solid var(--appbar-color);
+    padding: 10px 0 10px 10px;
+    background-color: var(--be-replied-bgcolor);
+
+    .name {
+      color: #517eaf;
+    }
+  }
+}
+
+.divider {
+  margin-top: 10px !important;
+}

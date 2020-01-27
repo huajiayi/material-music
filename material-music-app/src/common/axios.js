@@ -30,7 +30,6 @@ instance.interceptors.response.use(res => {
   // code为1代表成功
   if(code === 1) {
     if(data) return data
-    Toast.success(msg)
     return true
   }else {
     // 用户登录状态失效

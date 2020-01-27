@@ -1,3 +1,5 @@
 export * from './user'
 export * from './discovery'
 export * from './song'
+export * from './song-list'
+export * from './comment'

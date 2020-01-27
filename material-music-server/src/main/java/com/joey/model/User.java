@@ -2,9 +2,10 @@ package com.joey.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class User {
+public class User implements Serializable {
 
     private Integer id;
 
@@ -16,7 +17,6 @@ public class User {
 
     private String avatarUrl;
 
-    @JsonIgnore
     private String salt;
 
     @JsonIgnore

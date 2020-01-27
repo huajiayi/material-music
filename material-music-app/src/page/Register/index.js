@@ -18,12 +18,13 @@ import defaultAvatar from '@/assets/img/defaultAvatar.jpg'
 import { register } from '@/api'
 import Toast from '@/components/Toast'
 import { base64toBlob } from '@/common/utils'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import useHistoryWithName from '@/hook/useHistoryWithName'
 
 export default function Register() {
 
   const dispatch = useDispatch()
-  const history = useHistory()
+  const history = useHistoryWithName()
   const location = useLocation()
 
   const [avatar, setAvatar] = useState(defaultAvatar)

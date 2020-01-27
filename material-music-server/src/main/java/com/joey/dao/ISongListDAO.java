@@ -12,11 +12,11 @@ import java.util.List;
 @Repository
 public interface ISongListDAO {
 
-    @Insert("insert into song_list (name, pic_url, collect_count, creator_id, create_time, update_time) " +
-            "values (#{name}, #{picUrl}, 0, #{creatorId}, now(), now())")
+    @Insert("insert into song_list (name, pic_url, description, collect_count, creator_id, create_time, update_time) " +
+            "values (#{name}, #{picUrl}, #{description}, 0, #{creatorId}, now(), now())")
     int insert(SongList songList);
 
-    @Select("select a.id as id, name, pic_url, collect_count, a.create_time, b.id as uid, username, nickname, avatar_url from song_list as a " +
+    @Select("select a.id as id, name, pic_url, description, collect_count, a.create_time, b.id as uid, username, nickname, avatar_url from song_list as a " +
             "left join user as b on a.creator_id=b.id " +
             "order by a.create_time desc " +
             "limit #{limit}")
@@ -30,7 +30,7 @@ public interface ISongListDAO {
     })
     List<SongListVO> findLatestWithCreator(int limit);
 
-    @Select("select a.id as id, name, pic_url, collect_count, a.create_time, b.id as uid, username, nickname, avatar_url from song_list as a " +
+    @Select("select a.id as id, name, pic_url, description, collect_count, a.create_time, b.id as uid, username, nickname, avatar_url from song_list as a " +
             "left join user as b on a.creator_id=b.id " +
             "where a.id=#{id}")
     @ResultMap("creatorResultMap")
@@ -38,4 +38,8 @@ public interface ISongListDAO {
 
     @Update("update song_list set collect_count=collect_count+${num} where id=#{id}")
     int updateCollectCount(int id, int num);
+
+    @Select("select id, name, pic_url, creator_id from song_list " +
+            "where creator_id=#{userId}")
+    List<SongListVO> findByUserId(int userId);
 }

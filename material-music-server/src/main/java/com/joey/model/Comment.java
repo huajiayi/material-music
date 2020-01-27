@@ -20,7 +20,6 @@ public class Comment {
 
     private Integer beRepliedCommentId;
 
-    @JsonIgnore
     private Date createTime;
 
     @JsonIgnore

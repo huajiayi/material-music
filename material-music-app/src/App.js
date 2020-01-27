@@ -7,6 +7,8 @@ import Layout from '@/layout'
 import Login from '@/page/Login'
 import Register from '@/page/Register'
 import Profile from '@/page/Profile'
+import AddSongList from '@/page/AddSongList'
+import CollectSong from '@/page/CollectSong'
 import { SnackbarUtilsConfigurator } from '@/components/Toast'
 
 export default function App() {
@@ -38,6 +40,8 @@ export default function App() {
           <Login />
           <Register />
           <Profile />
+          <AddSongList />
+          <CollectSong />
         </Router>
       </SnackbarProvider>
     </ThemeProvider>

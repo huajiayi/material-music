@@ -14,10 +14,16 @@ export default {
     // menu
     [variables.menu_bgcolor]: '#fff',
 
-    //main
+    // main
     [variables.main_bgcolor]: '#eee',
     
     // progressBar
-    [variables.progress_color]: '#ff4d4f'
+    [variables.progress_color]: '#ff4d4f',
+
+    // appbar
+    [variables.appbar_color]: '#3f51b5',
+
+    // be_replied
+    [variables.be_replied_bgcolor]: '#d9d9d9'
   }
 }

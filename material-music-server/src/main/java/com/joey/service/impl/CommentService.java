@@ -28,8 +28,11 @@ public class CommentService implements ICommentService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private FileStorageService fileStorageService;
+
     /**
-     * @Description: 获取分页的评论
+     * @Description: 获取分页的评论 topic_type 0 歌曲 1 歌单
      * @Param: [topicType, topicId, pageNum, pageSize]
      * @return: com.joey.common.response.Response<com.github.pagehelper.PageInfo<com.joey.vo.CommentVO>>
      */
@@ -44,6 +47,8 @@ public class CommentService implements ICommentService {
             if(comment.getBeRepliedCommentId() != 0) {
                 comment.setBeReplied(commentDAO.findByIdWithUser(comment.getBeRepliedCommentId()));
             }
+            String fileUri = fileStorageService.getFileUrl(userService.MAPPER, comment.getUser().getAvatarUrl());
+            comment.getUser().setAvatarUrl(fileUri);
         }
         PageInfo<CommentVO> commentVOs = new PageInfo<>(list);
 
@@ -52,7 +57,7 @@ public class CommentService implements ICommentService {
 
     /**
      * @param comment
-     * @Description: 评论 topic_type 0 歌曲 1歌单
+     * @Description: 评论 topic_type: 0 歌曲 1 歌单
      * @Param: [comment]
      * @return: com.joey.common.response.Response
      */

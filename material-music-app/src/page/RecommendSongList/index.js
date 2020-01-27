@@ -14,7 +14,7 @@ export default function RecommendSongList() {
   const ref = useLazyLoad(loading)
 
   useEffect(() => {
-    setList(data.result)
+    setList(data)
   }, [data])
 
   return (
@@ -26,6 +26,7 @@ export default function RecommendSongList() {
         list.map(songList => (
           <Grid className="discovery-song-list-card-wrap" container item xs={4} sm={4} md={3} lg={2} key={songList.id}>
             <SongListCard
+              id={songList.id}
               name={songList.name}
               picUrl={songList.picUrl}
             />

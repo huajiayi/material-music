@@ -2,5 +2,5 @@
   flex: 1;
   background-color: var(--main-bgcolor);
   overflow: auto;
-  padding: 10px 14px $player-height 14px;
+  padding: 10px 14px var(--bottom-height) 14px;
 }

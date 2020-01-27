@@ -3,5 +3,7 @@ export default {
   showMenu: false,
   showLoginPage: false,
   showRegisterPage: false,
-  showProfilePage: false
+  showProfilePage: false,
+  showAddSongListPage: false,
+  showCollectSongPage: false
 }

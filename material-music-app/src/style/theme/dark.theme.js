@@ -18,6 +18,12 @@ export default {
     [variables.main_bgcolor]: '#262626',
 
     // progressBar
-    [variables.progress_color]: 'greenyellow'
+    [variables.progress_color]: 'greenyellow',
+
+    // appbar
+    [variables.appbar_color]: '#90caf9',
+
+    // be_replied
+    [variables.be_replied_bgcolor]: '#262626'
   }
 }

@@ -4,7 +4,7 @@ import Skeleton from '@material-ui/lab/Skeleton'
 export default function SongCardSkeleton() {
   
   return (
-    <>
+    <div className="song-card">
       <Skeleton width="5%"/>
       <Skeleton style={{ marginLeft: "10px" }} variant="rect" width={80} height={80} />
       
@@ -12,6 +12,6 @@ export default function SongCardSkeleton() {
         <Skeleton width="25%"/>
         <Skeleton width="50%"/>
       </div>
-    </>
+    </div>
   )
 }

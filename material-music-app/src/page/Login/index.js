@@ -16,14 +16,15 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import ResponsiveDialog from '../../components/ResponsiveDialog'
 import { login } from '@/api'
 import Toast from '@/components/Toast'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { customLocation } from '@/hook/useCustomLocation'
+import useHistoryWithName from '@/hook/useHistoryWithName'
 
 export default function Login() {
 
   const dispatch = useDispatch()
   const location = useLocation()
-  const history = useHistory()
+  const history = useHistoryWithName()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -62,6 +63,7 @@ export default function Login() {
       })
       localStorage.setItem("userId", user.id)
       history.push(customLocation.pathname)
+      window.location.reload()
     }
   }, [_setUser, history, password, username])
 

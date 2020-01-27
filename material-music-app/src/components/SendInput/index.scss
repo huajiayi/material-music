@@ -1,0 +1,14 @@
+.comments-form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: -10px;
+
+  .comments-input {
+    margin-left: 10px;
+  }
+
+  .send-icon {
+    margin-right: -15px;
+  }
+}

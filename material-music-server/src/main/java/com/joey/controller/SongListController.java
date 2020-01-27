@@ -50,13 +50,13 @@ public class SongListController {
 
     @PostMapping("track")
     public Response addSongToList(@RequestBody Map<String, Integer> map) {
-        Integer songId = map.get("songId");
+        Integer neteaseId = map.get("neteaseId");
         Integer songListId = map.get("songListId");
-        if(songId == null || songListId == null) {
+        if(neteaseId == null || songListId == null) {
             return Response.failure(Result.PARAM_NOT_MATCH);
         }
 
-        return songListService.addSong(songId, songListId);
+        return songListService.addSong(neteaseId, songListId);
     }
 
     @GetMapping("/songListPic/{fileName:.+}")

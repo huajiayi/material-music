@@ -13,6 +13,8 @@ public class SongList {
 
     private String picUrl;
 
+    private String description;
+
     private Integer collectCount;
 
     private Integer creatorId;
@@ -44,6 +46,14 @@ public class SongList {
 
     public void setPicUrl(String picUrl) {
         this.picUrl = picUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getCollectCount() {

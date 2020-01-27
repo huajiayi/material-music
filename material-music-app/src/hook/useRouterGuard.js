@@ -1,6 +1,6 @@
 import { useLocation, useHistory } from 'react-router-dom'
 import { useEffect } from 'react'
-import { isLogin } from '@/common/utils'
+import { hasLogin } from '@/common/utils'
 import router from '@/common/router'
 
 export default function useRouterGuard() {
@@ -9,6 +9,6 @@ export default function useRouterGuard() {
 
   useEffect(() => {
     const authRoutes = [...router.global, ...router.menu].filter(route => route.meta && route.meta.needLogin)
-    authRoutes.some(route => route.path === location.pathname) && !isLogin && history.push('/login')
+    authRoutes.some(route => route.path === location.pathname) && !hasLogin && history.push('/login')
   }, [history, location])
 }

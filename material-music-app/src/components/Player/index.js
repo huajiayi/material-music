@@ -3,16 +3,27 @@ import ProgressBar from '@/base/ProgressBar'
 import SongPic from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
 import PlayIcon from '@material-ui/icons/PlayCircleOutline'
-import PlaylistIcon from '@material-ui/icons/PlaylistPlay'
+// import PlaylistIcon from '@material-ui/icons/PlaylistPlay'
+import CollectIcon from '@material-ui/icons/Queue'
 import PauseIcon from '@material-ui/icons/PauseCircleOutline'
 import { useSelector } from 'react-redux'
 import { useAudio } from 'react-use'
 import { percent } from '@/common/utils'
+import { useDispatch } from 'react-redux'
+import { setShowCollectSongPage } from '@/store/common/action'
+import { hasLogin } from '@/common/utils'
+import Toast from '@/components/Toast'
+import { useHistory } from 'react-router-dom'
 import './index.scss'
 
 export default function Player() {
 
+  const dispatch = useDispatch()
+  const history = useHistory()
+
   const { name, picUrl, author, album, url } = useSelector(state => state.musicReducer.currentSong)
+
+  const _setShowCollectSongPage = useCallback(showCollectSongPage => dispatch(setShowCollectSongPage(showCollectSongPage)), [dispatch])
 
   const [audio, state, controls] = useAudio({
     src: url,
@@ -25,6 +36,16 @@ export default function Player() {
   const progressChanged = useCallback(value => {
     controls.seek(state.duration * (value / 100))
   }, [controls, state.duration])
+
+  const handleCollect = useCallback(() => {
+    if (!hasLogin()) {
+      Toast.error("请先登录！")
+      history.push('/login')
+      return
+    }
+
+    _setShowCollectSongPage(true)
+  }, [_setShowCollectSongPage, history])
 
   return (
     <>
@@ -41,8 +62,8 @@ export default function Player() {
           </div>
         </div>
         <div className="player-right">
-          <IconButton edge="start" color="default">
-            <PlaylistIcon className="player-icon" />
+          <IconButton edge="start" color="default" onClick={handleCollect}>
+            <CollectIcon className="player-icon" />
           </IconButton>
           {state.paused ? (
             <IconButton edge="start" color="default" className="play-icon" onClick={controls.play}>

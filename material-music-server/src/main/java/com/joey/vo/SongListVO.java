@@ -1,6 +1,7 @@
 package com.joey.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.github.pagehelper.PageInfo;
 import com.joey.model.Comment;
 import com.joey.model.Song;
 import com.joey.model.SongList;
@@ -14,9 +15,11 @@ public class SongListVO extends SongList {
 
     private List<Song> songs;
 
-    private List<Comment> comments;
+    private PageInfo<CommentVO> comments;
 
     private int count;
+
+    private boolean hasSubscribed;
 
     public SongListVO() {}
 
@@ -43,11 +46,11 @@ public class SongListVO extends SongList {
         this.songs = songs;
     }
 
-    public List<Comment> getComments() {
+    public PageInfo<CommentVO> getComments() {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(PageInfo<CommentVO> comments) {
         this.comments = comments;
     }
 
@@ -57,5 +60,13 @@ public class SongListVO extends SongList {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public boolean isHasSubscribed() {
+        return hasSubscribed;
+    }
+
+    public void setHasSubscribed(boolean hasSubscribed) {
+        this.hasSubscribed = hasSubscribed;
     }
 }

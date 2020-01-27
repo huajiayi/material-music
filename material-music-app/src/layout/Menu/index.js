@@ -72,14 +72,20 @@ export default function Menu() {
       </List>
       <Divider variant="middle" />
       <List>
-        {router.menu.map(route => (
-          <Link to={route.path} key={route.name}>
-            <ListItem button onClick={handleCloseMenu}>
-              <ListItemIcon><route.meta.icon /></ListItemIcon>
-              <ListItemText primary={route.meta.title} />
-            </ListItem>
-          </Link>
-        ))}
+        {router.menu.map(route => {
+          if(route.meta && route.meta.needLogin && !isLogin) return null
+          return (
+            <Link to={{
+              pathname: route.path,
+              state: {name: route.name}
+            }} key={route.name}>
+              <ListItem button onClick={handleCloseMenu}>
+                <ListItemIcon><route.meta.icon /></ListItemIcon>
+                <ListItemText primary={route.meta.title} />
+              </ListItem>
+            </Link>
+          )
+        })}
       </List>
     </div>
   )

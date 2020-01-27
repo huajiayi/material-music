@@ -14,6 +14,6 @@ public interface ILikeDAO {
     int insert(int userId, int commentId);
 
     @Delete("delete from `like` " +
-            "where userId=#{userId} and commentId=#{commentId}")
+            "where user_id=#{userId} and comment_id=#{commentId}")
     int delete(int userId, int commentId);
 }

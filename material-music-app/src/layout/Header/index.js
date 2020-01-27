@@ -20,7 +20,7 @@ export default function Header() {
   const openDrawer = useCallback(() => dispatch(setShowMenu(true)), [dispatch])
 
   useEffect(() => {
-    let route = router.menu.find(route => route.path === location.pathname)
+    let route = location.state && [...router.menu, ...router.page].find(route => route.name === location.state.name)
     route && setTitle(route.meta.title)
   }, [location])
 

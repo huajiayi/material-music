@@ -68,6 +68,6 @@ export function _base64toBlob(base64, filename = new Date().getTime() + ".jpg") 
   return new File([u8arr], filename, { type: mime })
 }
 
-export function isLogin() {
+export function hasLogin() {
   return localStorage.getItem('userId')
 }

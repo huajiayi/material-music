@@ -17,7 +17,13 @@ export default function Layout() {
   const currentSong = useSelector(state => state.musicReducer.currentSong)
 
   useEffect(() => {
-    playerWrap.current.style.bottom = !isEmptyObj(currentSong) ? '0' : '-70px'
+    if(!isEmptyObj(currentSong)) {
+      playerWrap.current.style.bottom = '0'
+      document.documentElement.style.setProperty('--bottom-height', '60px')
+    }else {
+      playerWrap.current.style.bottom = '-70px'
+      document.documentElement.style.setProperty('--bottom-height', '0')
+    }
   }, [currentSong])
 
   return (

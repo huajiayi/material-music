@@ -5,5 +5,7 @@ export default {
   main_bgcolor: '--main-bgcolor',
   scrollbar_color: '--scrollbar-color',
   input_color: '--input-color',
-  progress_color: '--progress-color'
+  progress_color: '--progress-color',
+  appbar_color: '--appbar-color',
+  be_replied_bgcolor: '--be-replied-bgcolor'
 }

@@ -18,7 +18,7 @@ export default function Main() {
   return (
     <main className="main">
         <Switch location={localLocation}>
-          {router.menu.map(route => (
+          {[...router.menu, ...router.page].map(route => (
             <Route path={route.path} key={route.name} exact={route.exact}>
               <route.component />
             </Route>

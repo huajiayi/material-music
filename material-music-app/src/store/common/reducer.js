@@ -16,5 +16,11 @@ export default handleActions({
   },
   SET_SHOW_PROFILE_PAGE(state, action) {
     return {...state, showProfilePage: action.payload}
+  },
+  SET_SHOW_ADD_SONGLIST_PAGE(state, action) {
+    return {...state, showAddSongListPage: action.payload}
+  },
+  SET_SHOW_COLLECT_SONG_PAGE(state, action) {
+    return {...state, showCollectSongPage: action.payload}
   }
 }, state)

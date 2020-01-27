@@ -4,6 +4,8 @@ import com.joey.common.constant.Base;
 import com.joey.common.response.Response;
 import com.joey.common.response.Result;
 import com.joey.common.util.PasswordHelper;
+import com.joey.common.util.RedisUtil;
+import com.joey.dao.ISongListDAO;
 import com.joey.dao.IUserDAO;
 import com.joey.dao.IUserSongListDAO;
 import com.joey.dto.RegisterDTO;
@@ -34,11 +36,22 @@ public class UserService implements IUserService {
     private IUserSongListDAO userSongListDAO;
 
     @Autowired
+    private ISongListDAO songListDAO;
+
+    @Autowired
     private FileStorageService fileStorageService;
+
+    @Autowired
+    private SongListService songListService;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
     private final static String UPLOAD_DIR = "avatar";
 
-    private final static String MAPPER = "/user/" + UPLOAD_DIR + "/";
+    public final static String MAPPER = "/user/" + UPLOAD_DIR + "/";
+
+    private final static int REDIS_EXPIRE = 3600; // Redis缓存过期时间(秒)
 
     /**
      * @Description: 注册
@@ -120,6 +133,8 @@ public class UserService implements IUserService {
         PasswordHelper.encryptPassword(user);
         userDAO.update(user);
 
+        redisUtil.del(user.getUsername());
+
         return Response.success();
     }
 
@@ -164,9 +179,15 @@ public class UserService implements IUserService {
      */
     @Override
     public Response<List<SongListVO>> getUserSongLists(int userId) {
-        List<SongListVO> songListVOs = userSongListDAO.findByUserId(userId);
+        List<SongListVO> songListVOList = userSongListDAO.findByUserId(userId);
+        List<SongListVO> userSongListVOList = songListDAO.findByUserId(userId);
+        songListVOList.addAll(userSongListVOList);
+        for(SongListVO songListVO: songListVOList) {
+            String fileUri = fileStorageService.getFileUrl(songListService.MAPPER, songListVO.getPicUrl());
+            songListVO.setPicUrl(fileUri);
+        }
 
-        return Response.success(songListVOs);
+        return Response.success(songListVOList);
     }
 
     /**
@@ -197,12 +218,28 @@ public class UserService implements IUserService {
     public User getCurrentUser() {
         Subject subject = SecurityUtils.getSubject();
         String username = (String)subject.getPrincipal();
+        User user = getUser(username);
 
+        return user;
+    }
+
+    /**
+    * @Description:  获取用户
+    * @Param: [username]
+    * @return: com.joey.model.User
+    */
+    public User getUser(String username) {
         if(username == null) {
             return null;
         }
 
-        User user = userDAO.findByUsername(username);
+        User user = (User)redisUtil.get(username);
+        if(user == null) {
+            user = userDAO.findByUsername(username);
+            if(user != null) {
+                redisUtil.set(username, user, REDIS_EXPIRE);
+            }
+        }
 
         return user;
     }

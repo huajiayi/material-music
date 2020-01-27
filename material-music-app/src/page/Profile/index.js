@@ -17,14 +17,15 @@ import ResponsiveDialog from '../../components/ResponsiveDialog'
 import Avatar from '@material-ui/core/Avatar'
 import { logout, updateUserInfo } from '@/api'
 import Toast from '@/components/Toast'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { customLocation } from '@/hook/useCustomLocation'
+import useHistoryWithName from '@/hook/useHistoryWithName'
 
 export default function Register() {
 
   const dispatch = useDispatch()
   const location = useLocation()
-  const history = useHistory()
+  const history = useHistoryWithName()
 
   const [avatar, setAvatar] = useState('')
   const [username, setUsername] = useState('')
@@ -71,6 +72,7 @@ export default function Register() {
       localStorage.removeItem("userId")
       _setUser({})
       history.push(customLocation.pathname)
+      window.location.reload()
     }
   }, [_setUser, history])
   const handleConfirm = useCallback(async () => {

@@ -20,7 +20,7 @@ public interface ICommentDAO {
             "left join `user` on user.id=comment.user_id " +
             "left join (SELECT * FROM `like` where user_id=#{userId}) `like` " +
             "on comment.id=`like`.comment_id " +
-            "where topic_type=#{topicType} and topic_id=#{topicId}")
+            "where topic_type=#{topicType} and topic_id=#{topicId} order by create_time desc")
     @Results(
             id = "userResultMap",
             value =  {

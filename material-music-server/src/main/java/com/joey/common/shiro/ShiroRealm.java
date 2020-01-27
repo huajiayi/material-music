@@ -2,6 +2,7 @@ package com.joey.common.shiro;
 
 import com.joey.dao.IUserDAO;
 import com.joey.model.User;
+import com.joey.service.impl.UserService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -19,7 +20,7 @@ import java.util.Set;
 public class ShiroRealm extends AuthorizingRealm {
 
     @Autowired
-    private IUserDAO userDao;
+    private UserService userService;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -40,11 +41,12 @@ public class ShiroRealm extends AuthorizingRealm {
         // 1.从主体传过来的认证信息中，获取用户名
         String username = (String) authenticationToken.getPrincipal();
 
-        // 2.通过用户名去到数据库中获取凭证
-        User user = userDao.findByUsername(username);
+        // 2.通过用户名获取凭证
+        User user = userService.getUser(username);
         if(user == null) {
             return null;
         }
+
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user.getUsername(),
                 user.getPassword(),

@@ -21,7 +21,9 @@ public class SongService implements ISongService {
      */
     @Override
     public Response addSong(Song song) {
-        songDAO.insert(song);
+        if(songDAO.checkSongById(song.getNeteaseId()) < 1) {
+            songDAO.insert(song);
+        }
 
         return Response.success();
     }

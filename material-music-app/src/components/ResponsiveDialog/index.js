@@ -9,8 +9,8 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { useTheme } from '@material-ui/core/styles'
 import './index.scss'
-import { useHistory } from 'react-router-dom'
 import { customLocation } from '@/hook/useCustomLocation'
+import useHistoryWithName from '@/hook/useHistoryWithName'
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -20,7 +20,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function ResponsiveDialog({ title, showDialog, children }) {
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'))
-  const history = useHistory()
+  const history = useHistoryWithName()
 
   const handleClose = useCallback(() => history.push(customLocation.pathname), [history])
 
