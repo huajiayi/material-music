@@ -2,8 +2,7 @@ import React, { useCallback } from 'react'
 import coverall from '@/assets/img/coverall.png'
 import thumbnail from '@/assets/img/thumbnail.png'
 import { useDispatch } from 'react-redux'
-import { getSongUrl, addSong } from '@/api'
-import Toast from '@/components/Toast'
+import { addSong } from '@/api'
 import { setCurrentSong } from '@/store/music/action'
 import './index.scss'
 
@@ -14,21 +13,13 @@ export default function SongListCard({ id, neteaseId, name, picUrl, author, albu
   const _setCurrentSong = useCallback(song => dispatch(setCurrentSong(song)), [dispatch])
 
   const play = useCallback(async () => {
-    const res = await getSongUrl(neteaseId)
-    if (!res.data[0].url) {
-      Toast.error('歌曲无法播放')
-      return
-    }
-
-    const songUrl = res.data[0].url
-
     await addSong({
       neteaseId,
       name,
       picUrl,
       author,
       album,
-      songUrl,
+      songUrl: '',
       duration
     })
 
@@ -37,8 +28,7 @@ export default function SongListCard({ id, neteaseId, name, picUrl, author, albu
       name,
       picUrl,
       author,
-      album,
-      url: songUrl
+      album
     })
   }, [_setCurrentSong, album, author, duration, name, neteaseId, picUrl])
 

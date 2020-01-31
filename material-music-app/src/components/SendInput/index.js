@@ -20,6 +20,11 @@ export default function SendInput({ topicId, topicType, beRepliedCommentId = 0, 
       return
     }
 
+    if(content === '') {
+      Toast.error("内容不能为空！")
+      return
+    }
+
     const isSuccess = await postComment({
       topicId,
       topicType,

@@ -1,6 +1,5 @@
 package com.joey.common.shiro;
 
-import com.joey.dao.IUserDAO;
 import com.joey.model.User;
 import com.joey.service.impl.UserService;
 import org.apache.shiro.authc.AuthenticationException;

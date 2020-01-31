@@ -15,6 +15,8 @@ import useRequest from '@/hook/useRequest'
 import { useParams, useHistory } from 'react-router-dom'
 import moment from 'moment'
 import { hasLogin } from '@/common/utils'
+import { useDispatch } from 'react-redux'
+import { setPlayList } from '@/store/music/action'
 import Toast from '@/components/Toast'
 import Comments from '@/components/Comments'
 import './index.scss'
@@ -23,18 +25,23 @@ export default function SongListDetail() {
 
   const { id } = useParams()
   const history = useHistory()
+  const dispatch = useDispatch()
 
   const [detail, setDetail] = useState({})
   const [value, setValue] = React.useState(0)
   const [data, loading] = useRequest(useCallback(() => getSongListDetail(id), [id]))
   const ref = useLazyLoad(loading)
 
+  const _setPlayList = useCallback(playList => dispatch(setPlayList(playList)), [dispatch])
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   }
 
   const playAll = () => {
-    // Todo
+    if(detail.songs && detail.songs.length > 0) {
+      _setPlayList(detail.songs)
+    }
   }
 
   const subscribe = async e => {
