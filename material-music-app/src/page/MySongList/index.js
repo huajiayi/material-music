@@ -74,7 +74,7 @@ export default function MySongList() {
             <ExpansionPanelDetails>
               <Grid container>
                 {collectedSongList.map(songList => (
-                  <Grid className="discovery-song-list-card-wrap" container item xs={6} sm={4} md={3} lg={2} key={songList.id}>
+                  <Grid className="discovery-song-list-card-wrap" container item xs={4} sm={4} md={3} lg={2} key={songList.id}>
                     <SongListCard
                       id={songList.id}
                       name={songList.name}
