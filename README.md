@@ -6,7 +6,9 @@
 
 ## 技术栈
 前端：React + react-router-dom + Redux + Axios
+
 后端：Spring Boot + Spring MVC + MyBatis + Shiro
+
 UI：Material-UI
 
 ## 功能
@@ -38,12 +40,20 @@ UI：Material-UI
 - 基于GitHub Actions的工作流，实现了自动部署
 
 ## 截图
-![](https://raw.githubusercontent.com/huajiayi/material-music/master/screenshots/pc_1.jpg)
-![](https://raw.githubusercontent.com/huajiayi/material-music/master/screenshots/pc_2.jpg)
-![](https://raw.githubusercontent.com/huajiayi/material-music/master/screenshots/pc_3.jpg)
-![](https://raw.githubusercontent.com/huajiayi/material-music/master/screenshots/pc_4.jpg)
+最新音乐
+![](https://raw.githubusercontent.com/huajiayi/material-music/master/screenshots/pc_1.png)
+
+我的歌单
+![](https://raw.githubusercontent.com/huajiayi/material-music/master/screenshots/pc_2.png)
+
+歌单详情
+![](https://raw.githubusercontent.com/huajiayi/material-music/master/screenshots/pc_3.png)
+
+歌单评论
+![](https://raw.githubusercontent.com/huajiayi/material-music/master/screenshots/pc_4.png)
 
 ## 免责声明
 此项目内的音频文件均来自网易云音乐，由[NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)提供
+
 本项目为练手项目，仅做学习交流使用，请勿用作商业用途，否则后果自负！
 
