@@ -7,7 +7,7 @@ const createMusicInstance = () => {
   })
 
   musicInstance.interceptors.response.use(res => {
-    return res.data
+    return res.data ? res.data : res
   }, err => {
     Toast.error(err.message)
     throw err

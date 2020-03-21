@@ -3,6 +3,7 @@ import RecommendSongList from '@/page/RecommendSongList'
 import RecommendSong from '@/page/RecommendSong'
 import SongListDetail from '@/page/SongListDetail'
 import MySongList from '@/page/MySongList'
+import Search from '@/page/Search'
 import MusicNoteIcon from '@material-ui/icons/MusicNote'
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic'
 import QueueMusicIcon from '@material-ui/icons/QueueMusic'
@@ -78,6 +79,15 @@ export default {
     component: SongListDetail,
     meta: {
       title: '歌单详情'
+    }
+  },
+  {
+    name: 'search',
+    path: '/search',
+    exact: false,
+    component: Search,
+    meta: {
+      title: '搜索歌曲'
     }
   }]
 }

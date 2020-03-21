@@ -3,18 +3,22 @@ import Grid from '@material-ui/core/Grid'
 import SongListCard from '@/components/SongListCard'
 import SongCardListSkeleton from '@/components/SongCardListSkeleton'
 import { getPersonalized } from '@/api'
-import useRequest from '@/hook/useRequest'
+import { useRequest } from '@umijs/hooks'
 import useLazyLoad from '@/hook/useLazyLoad'
 import './index.scss'
 
 export default function RecommendSongList() {
 
+  const [canLazy, setCanLazy] = useState(false)
   const [list, setList] = useState([])
-  const [data, loading] = useRequest(getPersonalized)
-  const ref = useLazyLoad(loading)
+  const {data, loading} = useRequest(getPersonalized)
+  const ref = useLazyLoad(canLazy)
 
   useEffect(() => {
-    setList(data)
+    if(data) {
+      setList(data)
+      setCanLazy(true)
+    }
   }, [data])
 
   return (

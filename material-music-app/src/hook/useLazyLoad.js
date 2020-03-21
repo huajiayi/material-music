@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import useIO from '@/hook/useIO'
 
-export default function useLazyLoad(loading, option) {
+export default function useLazyLoad(canLazy, option) {
   const opt = option || {}
 
   const ref = useRef(null)
@@ -12,11 +12,11 @@ export default function useLazyLoad(loading, option) {
   })
 
   useEffect(() => {
-    if (!loading && ref) {
+    if (canLazy && ref) {
       let imgs = Array.from(ref.current.getElementsByClassName('lazy'))
       setElements(imgs)
     }
-  }, [loading, setElements])
+  }, [canLazy, setElements])
 
   useEffect(() => {
     entries.forEach(entry => {

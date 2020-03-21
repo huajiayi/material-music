@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton'
 import AddIcon from '@material-ui/icons/Add'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import SongListCard from '@/components/SongListCard'
-import useRequest from '@/hook/useRequest'
+import { useRequest } from '@umijs/hooks'
 import useLazyLoad from '@/hook/useLazyLoad'
 import { isEmptyObj } from '@/common/utils'
 import useHistoryWithName from '@/hook/useHistoryWithName'
@@ -20,10 +20,11 @@ export default function MySongList() {
   const history = useHistoryWithName()
   const userId = localStorage.getItem('userId')
   
+  const [canLazy, setCanLazy] = useState(false)
   const [mySongList, setMySongList] = useState([])
   const [collectedSongList, setCollectedSongList] = useState([])
-  const [data, loading] = useRequest(useCallback(() => getUserSongList(userId), [userId]))
-  const ref = useLazyLoad(loading)
+  const {data, loading} = useRequest(useCallback(() => getUserSongList(userId), [userId]))
+  const ref = useLazyLoad(canLazy)
 
   const handleAddSongList = useCallback(e => {
     e.stopPropagation()
@@ -31,11 +32,12 @@ export default function MySongList() {
   }, [history])
 
   useEffect(() => {
-    if (isEmptyObj(data)) return
+    if (!data || isEmptyObj(data)) return
 
     const userId = Number.parseInt(localStorage.getItem('userId'))
     setMySongList(data.filter(songList => songList.creatorId === userId))
     setCollectedSongList(data.filter(songList => songList.creatorId !== userId))
+    setCanLazy(true)
   }, [data])
 
   return (

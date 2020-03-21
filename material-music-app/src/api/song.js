@@ -15,5 +15,8 @@ export const getSimiSongs = (id, option) => musicInstance.get(`/music-api/simi/s
 // 歌词
 export const getLyric = id => musicInstance.get(`/music-api/lyric?id=${id}`)
 
+// 搜索歌曲
+export const search = keywords => musicInstance.get(`/music-api/search?keywords=${keywords}&type=1&limit=20`)
+
 // 把歌曲添加到后台数据库
 export const addSong = song => axios.post('/api/song', song)

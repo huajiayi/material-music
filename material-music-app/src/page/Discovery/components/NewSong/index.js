@@ -5,17 +5,21 @@ import SongCardSkeleton from '@/components/SongCardSkeleton'
 import { getNewSongs } from '@/api'
 import Title from '@/components/Title'
 import useLazyLoad from '@/hook/useLazyLoad'
-import useRequest from '@/hook/useRequest'
+import { useRequest } from '@umijs/hooks'
 import './index.scss'
 
 export default function NewSong() {
 
+  const [canLazy, setCanLazy] = useState(false)
   const [list, setList] = useState([])
-  const [data, loading] = useRequest(getNewSongs)
-  const ref = useLazyLoad(loading)
+  const {data, loading} = useRequest(getNewSongs)
+  const ref = useLazyLoad(canLazy)
 
   useEffect(() => {
-    setList(data.result)
+    if(data) {
+      setList(data.result)
+      setCanLazy(true)
+    }
   }, [data])
 
   return (

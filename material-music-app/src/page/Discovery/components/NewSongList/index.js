@@ -4,18 +4,22 @@ import SongListCard from '@/components/SongListCard'
 import SongCardListSkeleton from '@/components/SongCardListSkeleton'
 import { getPersonalized } from '@/api'
 import Title from '@/components/Title'
-import useRequest from '@/hook/useRequest'
+import { useRequest } from '@umijs/hooks'
 import useLazyLoad from '@/hook/useLazyLoad'
 import './index.scss'
 
 export default function NewSongList() {
 
+  const [canLazy, setCanLazy] = useState(false)
   const [list, setList] = useState([])
-  const [data, loading] = useRequest(useCallback(() => getPersonalized({ limit: 12 }), []))
-  const ref = useLazyLoad(loading)
+  const {data, loading} = useRequest(useCallback(() => getPersonalized({ limit: 12 }), []))
+  const ref = useLazyLoad(canLazy)
 
   useEffect(() => {
-    setList(data)
+    if(data) {
+      setList(data)
+      setCanLazy(true)
+    }
   }, [data])
 
   return (

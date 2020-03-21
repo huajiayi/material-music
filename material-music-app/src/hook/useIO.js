@@ -20,6 +20,7 @@ const useIO = (options) => {
 			})
 
 			elements.forEach(element => {
+				console.log(element)
 				observer.current.observe(element)
 			})
 		}

@@ -1,0 +1,42 @@
+.search-wrap {
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+  height: 100%;
+
+  .search-result {
+    flex: 1;
+    overflow-y: scroll;
+    margin-top: 10px;
+
+    .song-warp {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      margin: 0 10px;
+      border-radius: 10px;
+      cursor: pointer;
+
+      &:hover {
+        box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
+      }
+    
+      .keywords {
+        color: #096dd9;
+      }
+
+      .song-name {
+        font-size: 16px;
+        @include text-ellipsis-multi(1);
+      }
+    
+      .song-detail {
+        font-size: 14px;
+        margin-top: 5px;
+        @include text-ellipsis-multi(1);
+        color: #8c8c8c;
+      }
+    }
+  }
+}
+

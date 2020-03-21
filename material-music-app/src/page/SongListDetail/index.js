@@ -11,10 +11,10 @@ import Tab from '@material-ui/core/Tab'
 import TabPanel from '@/components/TabPanel'
 import SongCard from '@/components/SongCard'
 import { getSongListDetail, subscribeSongList } from '@/api'
-import useRequest from '@/hook/useRequest'
+import { useRequest } from '@umijs/hooks'
 import { useParams, useHistory } from 'react-router-dom'
 import moment from 'moment'
-import { hasLogin } from '@/common/utils'
+import { hasLogin, isEmptyObj } from '@/common/utils'
 import { useDispatch } from 'react-redux'
 import { setPlayList } from '@/store/music/action'
 import Toast from '@/components/Toast'
@@ -27,10 +27,11 @@ export default function SongListDetail() {
   const history = useHistory()
   const dispatch = useDispatch()
 
+  const [canLazy, setCanLazy] = useState(false)
   const [detail, setDetail] = useState({})
   const [value, setValue] = React.useState(0)
-  const [data, loading] = useRequest(useCallback(() => getSongListDetail(id), [id]))
-  const ref = useLazyLoad(loading)
+  const {data, loading} = useRequest(useCallback(() => getSongListDetail(id), [id]))
+  const ref = useLazyLoad(canLazy)
 
   const _setPlayList = useCallback(playList => dispatch(setPlayList(playList)), [dispatch])
 
@@ -68,12 +69,15 @@ export default function SongListDetail() {
   },[detail])
 
   useEffect(() => {
-    data.createTime = moment(data.createTime).format('YYYY-MM-DD')
-    setDetail(data)
+    if(data) {
+      data.createTime = moment(data.createTime).format('YYYY-MM-DD')
+      setDetail(data)
+      setCanLazy(true)
+    }
   }, [data])
 
   return (
-    !loading &&
+    !loading && !isEmptyObj(detail) &&
     <div className="song-list-detail">
       <div className="song-list">
         <div className="img-container">
